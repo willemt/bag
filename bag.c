@@ -86,6 +86,7 @@ void* bag_take(bag_t * b)
     int idx;
     void* i;
 
+    if (0 == b->count) return NULL;
     idx = rand() % b->count;
     i = b->array[idx];
     b->array[idx] = b->array[b->count-1];
