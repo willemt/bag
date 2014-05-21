@@ -1,3 +1,4 @@
+
 #!/bin/bash
 
 # Auto generate single AllTests file for CuTest.
@@ -6,7 +7,7 @@
 # Author: Asim Jalis
 # Date: 01/08/2003
 
-FILES=*.c
+FILES=$1
 
 #if test $# -eq 0 ; then FILES=*.c ; else FILES=$* ; fi
 
@@ -23,7 +24,7 @@ cat $FILES | grep '^void Test' |
         -e 's/$/(CuTest*);/' \
         -e 's/^/extern /'
 
-echo -n \
+echo \
 '
 
 void RunAllTests(void) 
@@ -41,6 +42,7 @@ cat $FILES | grep '^void Test' |
 echo \
 '
     CuSuiteRun(suite);
+    CuSuiteSummary(suite, output);
     CuSuiteDetails(suite, output);
     printf("%s\\n", output->buffer);
 }
