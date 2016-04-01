@@ -11,7 +11,7 @@ void TestBag_new(
     CuTest * tc
 )
 {
-    bag_t *b;
+    tbag *b;
 
     b = bag_new();
     CuAssertTrue(tc, 0 == bag_count(b));
@@ -21,7 +21,7 @@ void TestBag_put(
     CuTest * tc
 )
 {
-    bag_t *b;
+    tbag *b;
     int val = 10;
 
     b = bag_new();
@@ -33,7 +33,7 @@ void TestBag_take(
     CuTest * tc
 )
 {
-    bag_t *b;
+    tbag *b;
     int val = 10;
     int *res;
 

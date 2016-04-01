@@ -5,48 +5,83 @@
 
 #include "bag.h"
 
-bag_t *bag_new()
-{
-    bag_t *b;
+struct sbag {
+    void **array;
+    int size;
+    int count;
+};
 
-    b = malloc(sizeof(bag_t));
+tbag *bag_new()
+{
+    tbag *b;
+
+    b = calloc(1, sizeof *b);
+    if (! b)
+      goto bad;
+
     b->size = 10;
-    b->array = malloc(sizeof(void *) * b->size);
+    b->array = malloc(sizeof *b->array * b->size);
+    if (! b->array)
+      goto bad;
+
     b->count = 0;
     return b;
+
+ bad:
+    bag_free(b);
+    return NULL;
 }
 
-static void __ensurecapacity(bag_t * b)
+static int __ensurecapacity(tbag * b)
 {
     int ii;
-    void **array_n;
+    void **array_n = NULL;
 
     if (b->count < b->size)
-	return;
+	return 0;
 
     /* double capacity */
     b->size *= 2;
-    array_n = malloc(sizeof(void *) * b->size);
+    array_n = malloc(b->size * sizeof *array_n);
+    if (! array_n)
+        goto bad;
 
     /* copy old data across to new array */
     for (ii = 0; ii < b->count; ii++)
     {
 	array_n[ii] = b->array[ii];
-        assert(b->array[ii]);
+        if (! array_n[ii])
+            goto bad;
     }
 
     /* swap arrays */
     free(b->array);
     b->array = array_n;
+
+    return 0;
+
+ bad:
+    if (array_n)
+    {
+        int i;
+        for (i = 0; i < ii; i++)
+            free(array_n[i]);
+    }
+
+    free(array_n);
+    return -1;
 }
 
-void bag_put(bag_t * b, void* item)
+int bag_put(tbag * b, void* item)
 {
-    __ensurecapacity(b);
+    if (__ensurecapacity(b) < 0)
+        return -1;
+
     b->array[b->count++] = item;
+    return 0;
 }
 
-void* bag_take(bag_t * b)
+void* bag_take(tbag * b)
 {
     int idx;
     void* i;
@@ -60,13 +95,16 @@ void* bag_take(bag_t * b)
     return i;
 }
 
-int bag_count(bag_t * b)
+int bag_count(tbag * b)
 {
     return b->count;
 }
 
-void bag_free(bag_t * b)
+void bag_free(tbag * b)
 {
+    if( ! b)
+        return;
+
     free(b->array);
     free(b);
 }
