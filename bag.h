@@ -16,7 +16,7 @@ bag_t *bag_new(void);
  * Free memory held by bag */
 void bag_free(bag_t * b);
 
-void bag_put(bag_t * b, void* i);
+int bag_put(bag_t * b, void* i);
 
 /**
  * Remove one random item.
