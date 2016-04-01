@@ -10,7 +10,7 @@ typedef struct {
 /**
  * Init a bag and return it. Malloc space for it.
  * @return initialised bag */
-bag_t *bag_new();
+bag_t *bag_new(void);
 
 /**
  * Free memory held by bag */
