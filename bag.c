@@ -5,9 +5,15 @@
 
 #include "bag.h"
 
-bag_t *bag_new()
+struct sbag {
+    void **array;
+    int size;
+    int count;
+};
+
+tbag *bag_new()
 {
-    bag_t *b;
+    tbag *b;
 
     b = calloc(1, sizeof *b);
     if (! b)
@@ -26,7 +32,7 @@ bag_t *bag_new()
     return NULL;
 }
 
-static int __ensurecapacity(bag_t * b)
+static int __ensurecapacity(tbag * b)
 {
     int ii;
     void **array_n = NULL;
@@ -66,7 +72,7 @@ static int __ensurecapacity(bag_t * b)
     return -1;
 }
 
-int bag_put(bag_t * b, void* item)
+int bag_put(tbag * b, void* item)
 {
     if (__ensurecapacity(b) < 0)
         return -1;
@@ -75,7 +81,7 @@ int bag_put(bag_t * b, void* item)
     return 0;
 }
 
-void* bag_take(bag_t * b)
+void* bag_take(tbag * b)
 {
     int idx;
     void* i;
@@ -89,12 +95,12 @@ void* bag_take(bag_t * b)
     return i;
 }
 
-int bag_count(bag_t * b)
+int bag_count(tbag * b)
 {
     return b->count;
 }
 
-void bag_free(bag_t * b)
+void bag_free(tbag * b)
 {
     if( ! b)
         return;

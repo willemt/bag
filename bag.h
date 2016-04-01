@@ -1,28 +1,24 @@
 #ifndef BAG_H
 #define BAG_H
 
-typedef struct {
-    void **array;
-    int size;
-    int count;
-} bag_t;
+typedef struct sbag tbag;
 
 /**
  * Init a bag and return it. Malloc space for it.
  * @return initialised bag */
-bag_t *bag_new(void);
+tbag *bag_new(void);
 
 /**
  * Free memory held by bag */
-void bag_free(bag_t * b);
+void bag_free(tbag * b);
 
-int bag_put(bag_t * b, void* i);
+int bag_put(tbag * b, void* i);
 
 /**
  * Remove one random item.
  * @return one random item */
-void *bag_take(bag_t * b);
+void *bag_take(tbag * b);
 
-int bag_count(bag_t * b);
+int bag_count(tbag * b);
 
 #endif /* BAG_H */
